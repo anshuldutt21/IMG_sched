@@ -9,16 +9,16 @@ USER_ROLE = (
 )	
 
 class RegistrationForm(UserCreationForm):
-	# user_role = forms.ChoiceField(label='userrole',choices = USER_ROLE)
+	user_role = forms.ChoiceField(label='userrole',choices = USER_ROLE)
 	user_year = forms.IntegerField(label='useryear')
 
 
 	class Meta:
 		model = User
-		fields = ('username','user_year','password1','password2')
+		fields = ('username','user_year','user_role','password1','password2')
 	def save(self,commit=True):
 		user = super(RegistrationForm,self).save(commit=False)
-		# user.user_role = self.cleaned_data['user_role']
+		user.user_role = self.cleaned_data['user_role']
 		user.user_year = self.cleaned_data['user_year']
 
 		if commit:

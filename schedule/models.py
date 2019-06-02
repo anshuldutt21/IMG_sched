@@ -14,19 +14,13 @@ USER_ROLE = (
 )
 class UserProfile(models.Model):
     username = models.OneToOneField(User,on_delete=models.CASCADE)
-    # user_role = models.IntegerField(choices = USER_ROLE)
+    user_role = models.IntegerField(choices = USER_ROLE,null=True,blank=True)
     user_year = models.IntegerField(null=True,blank=True)
 
 def create_profile(sender,**kwargs):
-	user=kwargs['instance']
+	# create_user(request)
 	if kwargs['created']:
-		user_profile = UserProfile.objects.create(username=user)
-        # user_profile = UserProfile.objects.create(username=kwargs['instance'])
+		user_profile = UserProfile.objects.create(username=kwargs['instance'])
 		user_profile.save()
-        
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     user_profile.user_year.save()
 
 post_save.connect(create_profile,sender=User)
