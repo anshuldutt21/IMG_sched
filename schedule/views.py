@@ -23,7 +23,7 @@ def register(request):
 			profile.save()
 			user.save()
 			registered=True
-			return redirect('/schedule/profile')
+			return redirect('/schedule/')
 		else:
 			return HttpResponse('you have entered wrong info')
 	else:

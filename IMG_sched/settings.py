@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'social_django',
+    # 'social_django',
     'rest_framework',
     'schedule', 
     'django.contrib.admin',

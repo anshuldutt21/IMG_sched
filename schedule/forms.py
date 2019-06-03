@@ -9,10 +9,11 @@ USER_ROLE = (
 )	
 
 
-class UserForm(UserCreationForm):
+class UserForm(forms.ModelForm):
+	password = forms.CharField(widget=forms.PasswordInput())
 	class Meta():
 		model = User
-		fields = ('username','password1','password2')
+		fields = ('username','password')
 
 class UserProfileForm(forms.ModelForm):
 	class Meta():
