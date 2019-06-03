@@ -13,14 +13,14 @@ USER_ROLE = (
         (2, 'ADMIN')
 )
 class UserProfile(models.Model):
-    username = models.OneToOneField(User,on_delete=models.CASCADE)
-    user_role = models.IntegerField(choices = USER_ROLE,null=True,blank=True)
-    user_year = models.IntegerField(null=True,blank=True)
+	user = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
+	user_role = models.IntegerField(choices = USER_ROLE,null=True,blank=True)
+	user_year = models.IntegerField(null=True,blank=True)
 
 def create_profile(sender,**kwargs):
 	# create_user(request)
 	if kwargs['created']:
-		user_profile = UserProfile.objects.create(username=kwargs['instance'])
+		user_profile = UserProfile.objects.create(username=kwargs.get('instance'))		
 		user_profile.save()
 
-post_save.connect(create_profile,sender=User)
+# post_save.connect(create_profile,sender=User)
