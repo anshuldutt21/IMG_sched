@@ -19,7 +19,6 @@ def register(request):
 			user.save()
 			profile=profile_form.save(commit=False)
 			profile.user=user
-			# user.save()
 			profile.save()
 			user.save()
 			registered=True
