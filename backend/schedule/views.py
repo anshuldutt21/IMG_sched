@@ -1,10 +1,16 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django.http import Http404
 from schedule.forms import UserForm,UserProfileForm
-from schedule.models import UserProfile
+from schedule.models import UserProfile,Meeting
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
 from rest_framework import viewsets, mixins, permissions
+from rest_framework import status, viewsets,generics
+from schedule.serializers import MeetingSerializer
+from rest_framework.response import Response
+from schedule.permissions import IsOwnerOrAdmin
 
 def home(request):
     return render(request, 'schedule/home.html')
@@ -35,3 +41,43 @@ def register(request):
 def profile(request):
 	args = {'user':request.user}
 	return render(request,'schedule/profile.html',args)
+
+class MeetingView(generics.ListCreateAPIView):
+	permission_classes = [IsOwnerOrAdmin]
+	queryset=Meeting.objects.all()
+	serializer_class=MeetingSerializer
+
+	def get(self,request, format=None):
+		meetings=Meeting.objects.all().filter(invitees=request.user.id)
+		serializer=MeetingSerializer(meetings, many=True)
+		return Response(serializer.data)
+
+	def post(self,request, format=None):
+		serializer=MeetingSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)	
+		
+class MeetingDetailView(APIView):
+	permission_classes = [IsOwnerOrAdmin]
+	def get_object(self,pk):
+		return Meeting.objects.get(pk=pk)
+	def get(self, request, pk, format=None):
+		meeting=self.get_object(pk)
+		serializer=MeetingSerializer(meeting)
+		return Response(serializer.data)
+
+	def put(self,request,pk,format=None):
+		meeting=self.get_object(pk)
+		serializer=MeetingSerializer(meeting)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self,request,format=None):
+		meeting=self.get_object(pk)
+		meeting.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
+
