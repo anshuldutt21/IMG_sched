@@ -4,8 +4,6 @@ from django.urls import path,include
 from . import views
 from django.contrib.auth import views as auth_views
 
-# router = DefaultRouter()
-# router.register(r'meetings',views.MeetingView)
 
 urlpatterns = [
         path('', views.home, name="index"),
@@ -14,8 +12,8 @@ urlpatterns = [
         path('profile/',views.profile,name="profile"),
         path('auth/',include('social_django.urls', namespace='social')),
         path('test/', views.MeetingView.as_view()),
-        path('test/<int:pk>',views.MeetingDetailView.as_view())
-        # path('',include(router.urls)),
+        path('test/<int:pk>',views.MeetingDetailView.as_view()),
+        path('<room_name>/<name>/', views.room, name='room'),
 
     
 ]

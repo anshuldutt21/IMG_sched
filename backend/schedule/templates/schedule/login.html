@@ -11,6 +11,9 @@
 	{% csrf_token %}
 	{{ form.as_p }}
 	<button type="submit"> LOGIN </button>
+	 <p><strong>-- OR --</strong></p>
+  <a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a><br>
+
 </form>
 </body>
 </html>

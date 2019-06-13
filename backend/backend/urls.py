@@ -20,5 +20,6 @@ from schedule import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('schedule/',include(urls)),
-    path('api-auth/',include('rest_framework.urls'))
+    path('api-auth/',include('rest_framework.urls')),
+    path('channels-api/',include('channels_api.urls')),
 ]

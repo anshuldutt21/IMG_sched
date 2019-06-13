@@ -11,6 +11,8 @@ from rest_framework import status, viewsets,generics
 from schedule.serializers import MeetingSerializer
 from rest_framework.response import Response
 from schedule.permissions import IsOwnerOrAdmin
+from django.utils.safestring import mark_safe
+import json
 
 def home(request):
     return render(request, 'schedule/home.html')
@@ -39,7 +41,8 @@ def register(request):
 		return render(request, 'schedule/register.html', args)
 @login_required
 def profile(request):
-	args = {'user':request.user}
+	meeting = Meeting.objects.all()
+	args = {'user':request.user,'meeting':meeting}
 	return render(request,'schedule/profile.html',args)
 
 class MeetingView(generics.ListCreateAPIView):
@@ -80,4 +83,11 @@ class MeetingDetailView(APIView):
 		meeting=self.get_object(pk)
 		meeting.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
+
+def room(request, room_name, name):
+	return render(request, 'schedule/room.html', {
+		'room_name_json' : mark_safe(json.dumps(room_name)),
+		'name_json' : mark_safe(json.dumps(name)),
+		})
+
 

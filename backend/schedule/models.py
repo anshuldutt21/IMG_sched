@@ -39,3 +39,9 @@ class Meeting(models.Model):
 	invitees=models.ManyToManyField(UserProfile,related_name='matchinvitees')
 	def __str__(self):
 		return self.purpose
+
+class Comment(models.Model):
+	comment_id=models.ForeignKey(Meeting,related_name='comment_id',on_delete=models.CASCADE,default=1)
+	comment_post=models.TextField(max_length=200,null=True)
+	datetime=models.DateTimeField(auto_now=True,auto_now_add=False)
+	comment_user=models.TextField(max_length=20, null=True)
