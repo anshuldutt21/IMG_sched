@@ -10,8 +10,7 @@
 <br>
 <br>
 </h2>
-<!-- <input type="radio" id ="room-name-input" value="one">one<br> -->
-<input type="text" id="name-logged" value={{ user  }} /><br>
+<input type="text" id="name-logged" value={{ user }} /><br>
 <input type="text" id="room-name-input"/><br>
 <input type="text" id="room-name-submit" type="button" value="enter"/>
 <script>
@@ -26,8 +25,7 @@
     document.querySelector('#room-name-submit').onclick = function(e) {
     	var roomName = document.querySelector('#room-name-input').value;
     	var name = document.querySelector('#name-logged').value;
-    	console.log(name);
-    	window.location.pathname = '/schedule/' + roomName + '/' + name +'/';
+    	window.location.pathname = '/schedule/' + roomName + '/';
     };
 
 

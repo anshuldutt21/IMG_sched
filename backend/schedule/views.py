@@ -2,13 +2,13 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.http import Http404
 from schedule.forms import UserForm,UserProfileForm
-from schedule.models import UserProfile,Meeting
+from schedule.models import UserProfile,Meeting,Comment
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import viewsets, mixins, permissions
 from rest_framework import status, viewsets,generics
-from schedule.serializers import MeetingSerializer
+from schedule.serializers import MeetingSerializer,CommentSerializer
 from rest_framework.response import Response
 from schedule.permissions import IsOwnerOrAdmin
 from django.utils.safestring import mark_safe
@@ -84,10 +84,20 @@ class MeetingDetailView(APIView):
 		meeting.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
-def room(request, room_name, name):
+def room(request, room_name):
 	return render(request, 'schedule/room.html', {
 		'room_name_json' : mark_safe(json.dumps(room_name)),
-		'name_json' : mark_safe(json.dumps(name)),
 		})
+class CommentView(APIView):
+	def get_object(self,fk):
+		return Comment.objects.get(comment_id=fk)
+	def get(self,request,fk,format=None):
+		comment=self.get_object(fk)
+		serializer=CommentSerializer(comment)
+		return Response(serializer.data)
 
+	def delete(self,request,fk,format=None):
+		comment=self.get_object(fk)
+		comment.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
 

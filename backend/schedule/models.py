@@ -29,9 +29,9 @@ def create_profile(sender,**kwargs):
 		user_profile = UserProfile.objects.create(username=kwargs.get('instance'))		
 		user_profile.save()
 
-# post_save.connect(create_profile,sender=User)
 class Meeting(models.Model):
 	purpose=models.CharField(max_length=100,null=True)
+	detail=models.TextField(max_length=200,null=True)
 	datetime=models.DateTimeField(auto_now=False,auto_now_add=False)
 	venue=models.CharField(max_length=30,default="IMG Lab")
 	meeting_choice=models.IntegerField(choices=MEETING_CHOICES)

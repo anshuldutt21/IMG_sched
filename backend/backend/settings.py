@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'img_sched',
         'USER':'anshuldutt21',
         'PASSWORD':'adsharma',
@@ -93,11 +93,9 @@ DATABASES = {
 
 CHANNEL_LAYERS = {
     "default": {
-        # "BACKEND": "asgi_redis.RedisChannelLayer",
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [('127.0.0.1', 6379)],
-            # "hosts": ['redis://localhost:6379'],
         },
        
     },

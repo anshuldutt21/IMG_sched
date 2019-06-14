@@ -6,7 +6,7 @@ import json
 
 class CommentConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        name = self.scope['url_route']['kwargs']['name']
+        self.user=self.scope["user"]
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'comment_%s' % self.room_name
         comment = Comment(comment_post="",comment_user="")
@@ -29,6 +29,7 @@ class CommentConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
 
     async def receive(self,text_data):
+        self.user=self.scope["user"]
         comment = Comment(comment_post="",comment_user="")
         meeting = Meeting.objects.get(id=self.room_name)
         text_data_json = json.loads(text_data)
@@ -42,9 +43,9 @@ class CommentConsumer(AsyncWebsocketConsumer):
                 'message': message,
             }
         )
-        name = self.scope['url_route']['kwargs']['name']
+        
         comment.comment_post=message
-        comment.comment_user=name
+        comment.comment_user=self.user
         comment.comment_id=meeting
         comment.save()
     # Receive message from room group

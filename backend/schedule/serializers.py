@@ -4,7 +4,7 @@ from schedule.models import UserProfile,Meeting,Comment
 class MeetingSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Meeting
-		fields = ('id','purpose','datetime','venue','meeting_choice','host','invitees')
+		fields = ('id','purpose','detail','datetime','venue','meeting_choice','host','invitees')
 		
 class CommentSerializer(serializers.ModelSerializer):
 	class Meta:
