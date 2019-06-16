@@ -4,8 +4,8 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import AbstractUser
 from django import forms
 from django.dispatch import receiver
-# from django.forms import widget
-# from django.forms import *
+from django.conf import settings
+from django.contrib.auth import get_user_model
 # Create your models here.
 
 USER_ROLE = (
@@ -16,6 +16,7 @@ MEETING_CHOICES = (
         (1,'Public'),
         (2,'Private') 
 )
+
 class UserProfile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE,null=True)
 	user_role = models.IntegerField(choices = USER_ROLE,null=True,blank=True)

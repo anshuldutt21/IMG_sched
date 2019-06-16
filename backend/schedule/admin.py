@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from schedule.models import UserProfile,Meeting,Comment
 # Register your models here.
+# admin.site.register(User)
 admin.site.register(UserProfile)
 admin.site.register(Meeting)
 admin.site.register(Comment)

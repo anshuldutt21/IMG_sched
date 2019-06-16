@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import django
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,28 +23,33 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '=#o1d3k_e0)7*mh%gi!qlcr7=^_j@i#q7&6%7(qa_!86_u9@=='
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
     'channels',
+    'schedule', 
     'social_django',
     'rest_framework',
-    'schedule', 
+    'rest_auth',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 ]
 
+SITE_ID=1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,6 +61,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'backend.urls'
+
 
 TEMPLATES = [
     {
@@ -76,7 +84,11 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'backend.routing.application'
 WSGI_APPLICATION = 'backend.wsgi.application'
-
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -149,6 +161,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/schedule/login/'
+GOOGLE_CLIENT_ID='1055466241480-7sbsrpppbqh2v0168rc1drh13c5vbio4.apps.googleusercontent.com'
+GOOGLE_CLIENT_SECRET = 'vp9tZK7PD-8z0WnAPq2C01lP'
+GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
 LOGIN_REDIRECT_URL = '/schedule/profile/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'  #Paste CLient Key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '5S4mldkXg1y0cLGiCymeB_1m' #Paste Secret Key

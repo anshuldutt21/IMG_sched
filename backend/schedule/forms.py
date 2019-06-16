@@ -8,7 +8,6 @@ USER_ROLE = (
         (2, 'ADMIN')
 )	
 
-
 class UserForm(forms.ModelForm):
 	password = forms.CharField(widget=forms.PasswordInput())
 	class Meta():
