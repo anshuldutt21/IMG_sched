@@ -1,14 +1,15 @@
 from rest_framework import serializers
 from schedule.models import UserProfile,Meeting,Comment,User
 from django.contrib.auth import get_user_model
+from rest_framework_jwt.settings import api_settings
 User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model=User
-		fields=('email','username','password')
+		fields=('username','password')
 class UserProfileSerializer(serializers.ModelSerializer):
 	user=UserSerializer(required=True)
-
+	
 	class Meta:
 		model=UserProfile
 		fields = ('user','user_role','user_year')
