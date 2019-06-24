@@ -2,6 +2,7 @@ from __future__ import print_function
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.http import Http404
+from rest_framework.decorators import api_view
 from schedule.forms import UserForm,UserProfileForm
 from schedule.models import UserProfile,Meeting,Comment
 from django.contrib.auth.decorators import login_required
@@ -61,6 +62,10 @@ def profile(request):
 	args = {'user':request.user,'meeting':meeting}
 	return render(request,'schedule/profile.html',args)
 
+@api_view(['GET'])
+def current_user(request):
+	serializer=UserSerializer(request.user)
+	return Response(serializer.data)
 class UserViewSet(generics.ListCreateAPIView):
 	permission_classes = [IsOwner]
 	queryset=UserProfile.objects.all()

@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import MeetingView,MeetingDetailView,CommentView,UserViewSet,UserDetailView
+from .views import current_user,MeetingView,MeetingDetailView,CommentView,UserViewSet,UserDetailView
 from .views import build_service,create_event
 from django.urls import path,include
 from . import views
@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
         path('', views.home, name="index"),
+        path('current_user/',current_user),
         path('login/',auth_views.LoginView.as_view(template_name='schedule/login.html')),
         path('register/',views.register, name="register"),
         path('userlist/',views.UserViewSet.as_view()),

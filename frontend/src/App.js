@@ -17,23 +17,24 @@ class App extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   if (this.state.logged_in) {
-  //     fetch('http://localhost:8000/schedule/rest-auth/login/', {
-  //       headers: {
-  //         Authorization: `JWT ${localStorage.getItem('token')}`
-  //       }
-  //     })
-  //       .then(res => res.json())
-  //       .then(json => {
-  //         this.setState({ username: json.username });
-  //       });
-  //   }
-  // }
+  componentDidMount() {
+    if (this.state.logged_in) {
+      fetch('http://localhost:8000/schedule/rest-auth/user/', {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(json => {
+          this.setState({ username: json.username });
+        });
+    }
+  }
 
   handle_login = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000/schedule/rest-auth/login', {
+    fetch('http://localhost:8000/schedule/rest-auth/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -51,7 +52,6 @@ class App extends Component {
         });
       });
   };
-
   handle_signup = (e, data) => {
     e.preventDefault();
     fetch('http://localhost:8000//users/', {
