@@ -1,11 +1,12 @@
-import React from 'react';
-import logo from './logo.svg'
-import  {Component} from "react";
-// import {connect} from "react-redux";
-// import {Link} from "react-router-dom";
-import Nav from './components/login';
+import React,{ Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+import Profile from './components/Profile';
+import Nav from './components/Nav';
 import LoginForm from './components/LoginForm';
-import SignupForm from './components/SignupForm';
+import SignupForm from './components/Register';
+import './App.css';
+
 
 class App extends Component {
   constructor(props) {
@@ -13,48 +14,46 @@ class App extends Component {
     this.state = {
       displayed_form: '',
       logged_in: localStorage.getItem('token') ? true : false,
-      username: ''
+      username: '',
     };
   }
 
   componentDidMount() {
     if (this.state.logged_in) {
-      fetch('http://localhost:8000/schedule/rest-auth/user/', {
+      fetch('http://127.0.0.1:8000/schedule/current_user/', {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+             'Authorization': `JWT ${window.localStorage.getItem('token')}`  
+      }
       })
         .then(res => res.json())
         .then(json => {
-          this.setState({ username: json.username });
+          this.setState({ username: json.username, is_staff: json.is_staff });
         });
     }
   }
 
-  handle_login = (e, data) => {
-    e.preventDefault();
-    fetch('http://localhost:8000/schedule/rest-auth/login/', {
+  handle_login = (event, data) => {
+    event.preventDefault();
+    fetch('http://127.0.0.1:8000/schedule/token-auth/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data)
-    })
-      .then(res => res.json())
+    }).then((response) => response.json())
       .then(json => {
-        localStorage.setItem('token', json.token);
+        window.localStorage.setItem('token', json.token);
         this.setState({
           logged_in: true,
           displayed_form: '',
-          username: json.user.username
+          username: json.username,
         });
       });
   };
+
   handle_signup = (e, data) => {
     e.preventDefault();
-    fetch('http://localhost:8000//users/', {
+    fetch('http://127.0.0.1:8000/schedule/userlist/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -63,11 +62,13 @@ class App extends Component {
     })
       .then(res => res.json())
       .then(json => {
-        localStorage.setItem('token', json.token);
+        window.localStorage.setItem('token', json.token);
+        console.log(data);
         this.setState({
-          logged_in: true,
           displayed_form: '',
-          username: json.username
+          username: json.username,
+          is_staff: json.is_staff,
+          logged_in: true
         });
       });
   };
@@ -95,7 +96,7 @@ class App extends Component {
       default:
         form = null;
     }
-
+    if(!this.state.logged_in){
     return (
       <div className="App">
         <Nav
@@ -108,14 +109,17 @@ class App extends Component {
           {this.state.logged_in
             ? `Hello, ${this.state.username}`
             : 'Please Log In'}
+
         </h3>
       </div>
     );
   }
+  else {
+    return (
+        <Profile handle_logout={this.handle_logout} username={this.state.username} />
+    )
+  }
+}
 }
 
 export default App;
-
-
-
-

@@ -3,10 +3,12 @@ from .views import current_user,MeetingView,MeetingDetailView,CommentView,UserVi
 from .views import build_service,create_event
 from django.urls import path,include
 from . import views
+from rest_framework_jwt.views import obtain_jwt_token
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
+        path('token-auth/', obtain_jwt_token),
         path('', views.home, name="index"),
         path('current_user/',current_user),
         path('login/',auth_views.LoginView.as_view(template_name='schedule/login.html')),

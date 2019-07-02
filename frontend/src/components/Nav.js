@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// import { Redirect } from 'react-router-dom';
+// import Profile from './Profile'
 
 function Nav(props) {
   const logged_out_nav = (
@@ -13,8 +15,9 @@ function Nav(props) {
     <ul>
       <li onClick={props.handle_logout}>logout</li>
     </ul>
+
   );
-  return <div>{props.logged_in ? logged_in_nav : logged_out_nav}</div>;
+  return <div>{props.logged_in ? logged_in_nav : logged_out_nav} </div>;
 }
 
 export default Nav;

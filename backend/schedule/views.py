@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework import viewsets, mixins, permissions
 from rest_framework import status, viewsets,generics
-from schedule.serializers import UserSerializer,UserProfileSerializer,MeetingSerializer,CommentSerializer
+from schedule.serializers import UserSerializer,UserProfileSerializer,MeetingSerializer,CommentSerializer,UserSerializerWithToken
 from rest_framework.response import Response
 from schedule.permissions import IsOwnerOrAdmin,IsOwner
 from django.utils.safestring import mark_safe
@@ -66,10 +66,13 @@ def profile(request):
 def current_user(request):
 	serializer=UserSerializer(request.user)
 	return Response(serializer.data)
+
+
+	
 class UserViewSet(generics.ListCreateAPIView):
-	permission_classes = [IsOwner]
-	queryset=UserProfile.objects.all()
-	serializer_class=UserProfileSerializer
+	permission_classes = [permissions.AllowAny]
+	queryset=User.objects.all()
+	serializer_class=UserSerializerWithToken
 
 class UserDetailView(APIView):
 	permission_classes = [IsOwner]

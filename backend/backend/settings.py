@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'channels',
     'schedule', 
     'social_django',
@@ -47,7 +48,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'corsheaders',
 ]
 
 SITE_ID=1
@@ -118,6 +118,17 @@ CHANNEL_LAYERS = {
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -134,6 +145,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'schedule.utils.my_jwt_response_handler'
+}
 
 AUTHENTICATION_BACKENDS = (
  'social_core.backends.open_id.OpenIdAuth',  # for Google authentication
@@ -161,11 +176,18 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-    'http://localhost:8000',
-    )
+# CORS_ALLOW_CREDENTIALS = False
 
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -178,3 +200,6 @@ LOGIN_REDIRECT_URL = '/schedule/profile/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'  #Paste CLient Key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '5S4mldkXg1y0cLGiCymeB_1m' #Paste Secret Key
 
+# CORS_ORIGIN_WHITELIST = (
+#       'http://localhost:3000',
+#     )
