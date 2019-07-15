@@ -6,6 +6,7 @@ import Nav from './components/Nav';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/Register';
 import './App.css';
+import GoogleLogin from 'react-google-login';
 
 
 class App extends Component {
@@ -16,6 +17,7 @@ class App extends Component {
       logged_in: localStorage.getItem('token') ? true : false,
       username: '',
     };
+    this.google_sign = this.google_sign.bind(this);
   }
 
   componentDidMount() {
@@ -43,12 +45,13 @@ class App extends Component {
     }).then((response) => response.json())
       .then(json => {
         window.localStorage.setItem('token', json.token);
+        window.location.reload();
         this.setState({
-          logged_in: true,
           displayed_form: '',
           username: json.username,
+          logged_in: true,
         });
-      });
+      }); 
   };
 
   handle_signup = (e, data) => {
@@ -77,7 +80,11 @@ class App extends Component {
     localStorage.removeItem('token');
     this.setState({ logged_in: false, username: '' });
   };
-
+   google_sign(googleUser) {
+    this.setState({
+          username: googleUser.getBasicProfile().getName(),
+        });
+   }
   display_form = form => {
     this.setState({
       displayed_form: form
@@ -96,6 +103,18 @@ class App extends Component {
       default:
         form = null;
     }
+
+     const responseGoogle = (response) => {
+      console.log(response.tokenId);
+      // window.localStorage.setItem('token',response.tokenId);
+      fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token='+response.tokenId, {
+        method:'GET',
+    }).then((response) => response.json())
+      .then(json => {
+        window.localStorage.setItem('token',response.tokenId);
+        // console.log(json.getName());.
+      });
+    }
     if(!this.state.logged_in){
     return (
       <div className="App">
@@ -105,9 +124,17 @@ class App extends Component {
           handle_logout={this.handle_logout}
         />
         {form}
+        <h3> OR </h3>
+        <br />
+        <GoogleLogin
+        clientId='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'
+        buttonText="LOGIN WITH GOOGLE"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        />
         <h3>
           {this.state.logged_in
-            ? `Hello, ${this.state.username}`
+            ? `Hello,`
             : 'Please Log In'}
 
         </h3>

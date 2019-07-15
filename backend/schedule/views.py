@@ -12,7 +12,7 @@ from rest_framework import viewsets, mixins, permissions
 from rest_framework import status, viewsets,generics
 from schedule.serializers import UserSerializer,UserProfileSerializer,MeetingSerializer,CommentSerializer,UserSerializerWithToken
 from rest_framework.response import Response
-from schedule.permissions import IsOwnerOrAdmin,IsOwner
+from schedule.permissions import has_object_permissions,IsOwner
 from django.utils.safestring import mark_safe
 import json
 import os
@@ -98,11 +98,11 @@ class UserDetailView(APIView):
 
 
 class MeetingView(generics.ListCreateAPIView):
-	permission_classes = [IsOwnerOrAdmin]
 	queryset=Meeting.objects.all()
 	serializer_class=MeetingSerializer
 
 	def get(self,request, format=None):
+		# meetings=Meeting.objects.all()
 		meetings=Meeting.objects.all().filter(invitees=request.user.id)
 		serializer=MeetingSerializer(meetings, many=True)
 		return Response(serializer.data)
@@ -115,25 +115,29 @@ class MeetingView(generics.ListCreateAPIView):
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)	
 		
 class MeetingDetailView(APIView):
-	permission_classes = [IsOwnerOrAdmin]
+	# permission_classes = [IsOwnerOrAdmin]
+	# print(has_object_permissions(request, meeting))
 	def get_object(self,pk):
 		return Meeting.objects.get(pk=pk)
 	def get(self, request, pk, format=None):
-		meeting=self.get_object(pk)
+		# print(request.user)
+		meeting=Meeting.objects.get(pk=pk)
 		serializer=MeetingSerializer(meeting)
 		return Response(serializer.data)
 
 	def put(self,request,pk,format=None):
+		# permission_classes = [IsOwnerOrAdmin]
 		meeting=self.get_object(pk)
-		serializer=MeetingSerializer(meeting)
-		if serializer.is_valid():
+		serializer=MeetingSerializer(meeting, data=request.data)
+		if serializer.is_valid() & has_object_permissions(request,meeting):
 			serializer.save()
-			return Response(serializer.data)
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-	def delete(self,request,format=None):
+	def delete(self,request,pk,format=None):
 		meeting=self.get_object(pk)
-		meeting.delete()
+		if has_object_permissions(request,meeting):
+			meeting.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
 def room(request, room_name):
@@ -142,10 +146,10 @@ def room(request, room_name):
 		})
 class CommentView(APIView):
 	def get_object(self,fk):
-		return Comment.objects.get(comment_id=fk)
+		return Comment.objects.all().filter(comment_id=fk)
 	def get(self,request,fk,format=None):
 		comment=self.get_object(fk)
-		serializer=CommentSerializer(comment)
+		serializer=CommentSerializer(comment , many=True)
 		return Response(serializer.data)
 
 	def delete(self,request,fk,format=None):
@@ -187,7 +191,6 @@ def build_service(request):
 def create_event(request):
     service = build_service(request)
     meeting=Meeting.objects.latest('id')
-    # meeting=Meeting.objects.get(id=4)
     event = service.events().insert(calendarId='primary', body={
         'summary': meeting.purpose,
         'description' : meeting.detail,

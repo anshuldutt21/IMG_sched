@@ -7,15 +7,19 @@ import {Redirect} from 'react-router-dom';
 class Meetingform extends React.Component{
 	constructor(props) {
 		super(props);
-		this.state = {success:0,
+		this.state = { users:[],
+      success:0,
 			     purpose:"",
                  detail:"", 
                  venue:"",
                  meeting_choice:1,
                  host:2,
+                 errors: null,
                  datetime:"2019-06-14T05:58:05Z",
-                 invitees:[1,3],
+                 invitees:[1],
 	              };
+    this.getUsers=this.getUsers.bind(this);
+    this.getUsers();
 	}
     handleSubmit(e, data) {
     	e.preventDefault();
@@ -35,15 +39,36 @@ class Meetingform extends React.Component{
       });
 
     }
+    getUsers() {
+    fetch('http://127.0.0.1:8000/schedule/userlist/',{
+      method:'GET',
+      headers: {
+         'Authorization': `JWT ${window.localStorage.getItem('token')}`
+      }
+    })
+    .then(response => response.json())
+    .then((response) => {
+      this.setState({
+        users: response,
+      });
+    })
+    .catch(error => this.setState({ error }));
+   }
+
     handle_change = e => {
     const name = e.target.name;
     const value = e.target.value;
-    this.setState(prevstate => {
-      const newState = { ...prevstate };
-      newState[name] = value;
-      return newState;
+    this.setState({
+      [name] : value
     });
+    console.log(value);
   };
+
+  handle_Change2 = e => {
+  let value = Array.from(e.target.selectedOptions, option => option.value);
+  this.setState({invitees : value});
+  console.log(this.state.invitees);
+}
 
     render () {
     	if(this.state.success==1) {
@@ -78,11 +103,10 @@ class Meetingform extends React.Component{
      <label>
    meeting_choice
         </label>
-   <input 
-     name="meeting_choice"
-     type="number"
-     value={this.state.meeting_choice}
-     onChange={this.handle_change} />
+ <select name="meeting_choice" value={this.state.meeting_choice} onChange={this.handle_change}>
+  <option value='1'>Public</option>
+  <option value='2'>Private</option>
+</select> 
 
      <br />
      <label>
@@ -98,21 +122,16 @@ class Meetingform extends React.Component{
      <label>
        host
         </label>
-   <input 
-     name="host"
-     type="number"
-     value={this.state.host}
-     onChange={this.handle_change} />
+<select name="host" onChange={this.handle_change} value = {this.state.host} >
+{this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
+</select>
      <br />
        <label>
         invitees
          </label>
-
-   <input 
-     name="invitees"
-     type="number"
-     value={this.state.invitees}
-      />
+<select name="invitees" onChange={this.handle_Change2} value = {this.state.invitees} multiple>
+{this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
+</select>
      <input type="submit" />
   </form>
   );

@@ -5,13 +5,15 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.0",
-    "babel-eslint": "^10.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-google-login": "^5.0.4",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "semantic-ui-react": "^0.87.2"
+    "semantic-ui": "^2.4.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.87.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,5 +37,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "babel-eslint": "10.0.1"
+  }
 }

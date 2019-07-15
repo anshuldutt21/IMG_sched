@@ -3,18 +3,21 @@ import PropTypes from 'prop-types';
 import MeetingForm from './MeetingForm';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import Service from './Service';
+import {Redirect} from 'react-router-dom';
+import MeetingComment from './MeetingComment';
 
-
+const service = new Service();
 class  Profile extends React.Component{
-    
 constructor(props) {
-    super(props);
+    super(props); 
     this.state = {
       meetings: [],
       isloading: true,
       errors: null,
     };
     this.getPosts = this.getPosts.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.getPosts();
    }
 
@@ -32,14 +35,22 @@ constructor(props) {
    			meetings: response,
    			isloading: false,
    		});
-   		console.log(this.state.isloading);
    	})
    	.catch(error => this.setState({ error , isloading: false}));
+   }
+   handleDelete(e, pk){
+   	service.deleteMeeting({pk : pk}).then(()=>{
+   		this.setState({
+   			meetings : []
+   		})
+   	   this.getPosts();
+   	});
    }
 
 
    render() {
    	   const { isloading,meetings } =this.state;
+   	   const username = this.props.username;
    		return(
              <div>
 			<h1>hello {this.props.username}  </h1>
@@ -51,16 +62,19 @@ constructor(props) {
               <div>
           {!isloading ? (
             meetings.map(meeting => {
-              const { id,purpose,detail,venue,datetime,host,invitees } = meeting;
+              const { pk,purpose,detail,venue,datetime,host,invitees } = meeting;
               return (
-                <div key={id}>
-                <h2>{id}</h2>
+                <div key={pk}>
+                <h2>{pk}</h2>
                   <h2>{purpose}</h2>
                   <p>{detail}</p>
                   <h3>{venue}</h3>
                   <h3> {datetime}</h3>
                   <h3> {host} </h3>
-                  <Link to ='/MeetingDetail?id={id}'> more info </Link>
+                  <button  onClick={(e)=>  this.handleDelete(e,meeting.pk) }> Delete</button>
+                  <a href={"/MeetingDetail/"+meeting.pk}>Update </a>
+                  <a href={"/MeetingComment/"+meeting.pk+"?user="+username}> COMMENTS </a>
+                  
                   <hr />
                 </div>
               );

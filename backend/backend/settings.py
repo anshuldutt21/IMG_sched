@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
     'channels',
+    'corsheaders',
     'schedule', 
     'social_django',
     'rest_framework',
@@ -119,9 +119,6 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -147,6 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 JWT_AUTH = {
+    'JWT_AUTH_COOKIE': 'JWT',
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'schedule.utils.my_jwt_response_handler'
 }
 

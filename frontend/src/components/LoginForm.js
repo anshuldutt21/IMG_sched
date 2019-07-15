@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-// import { Button, Form, Message} from 'semantic-ui-react'
+import { Button, Checkbox, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 
@@ -23,6 +23,7 @@ class LoginForm extends React.Component {
     return (
       <form onSubmit={e => this.props.handle_login(e, this.state)}>
         <h4>Log In</h4>
+        <Form.Field>
         <label htmlFor="username">Username
         <input
           type="text"
@@ -31,6 +32,8 @@ class LoginForm extends React.Component {
           onChange={this.handle_change}
         />
         </label>
+        </Form.Field>
+        <Form.Field>
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -38,7 +41,8 @@ class LoginForm extends React.Component {
           value={this.state.password}
           onChange={this.handle_change}
         />
-        <input type="submit" />
+        </Form.Field>
+         <Button type='submit'>Submit</Button>
       </form>
     );
   }

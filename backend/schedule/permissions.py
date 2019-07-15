@@ -1,10 +1,7 @@
 from rest_framework import permissions
 from django.contrib import admin
 
-class IsOwnerOrAdmin(permissions.BasePermission):
-	def has_object_permission(self,request, view, obj):
-		if request.method in permissions.SAFE_METHODS:
-			return True
+def has_object_permissions(request, obj):
 		return ((request.user.is_staff) or str(obj.host)==str(request.user)) 
 
 class IsOwner(permissions.BasePermission):
