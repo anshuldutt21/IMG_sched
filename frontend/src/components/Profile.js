@@ -16,11 +16,20 @@ constructor(props) {
       isloading: true,
       errors: null,
     };
+    this.calendar  =this.calendar.bind(this);
     this.getPosts = this.getPosts.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.getPosts();
+    this.calendar();
    }
-
+   calendar() {
+   	fetch('http://127.0.0.1:8000/schedule/calendar/cal',{
+   		method:'GET',
+    	headers: {
+         'Authorization': `JWT ${window.localStorage.getItem('token')}`
+      }
+   	})
+   }
    getPosts() {
     fetch('http://127.0.0.1:8000/schedule/test/',{
     	method:'GET',
@@ -71,6 +80,7 @@ constructor(props) {
                   <h3>{venue}</h3>
                   <h3> {datetime}</h3>
                   <h3> {host} </h3>
+                  <h4> {invitees} </h4>
                   <button  onClick={(e)=>  this.handleDelete(e,meeting.pk) }> Delete</button>
                   <a href={"/MeetingDetail/"+meeting.pk}>Update </a>
                   <a href={"/MeetingComment/"+meeting.pk+"?user="+username}> COMMENTS </a>

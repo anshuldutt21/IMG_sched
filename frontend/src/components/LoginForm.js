@@ -1,9 +1,14 @@
 import React, {Component} from 'react'
-import { Button, Checkbox, Form } from 'semantic-ui-react';
+import { Button, Checkbox, Form, Input  } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import './../css/Login.css';
+import GoogleLogin from 'react-google-login';
 
 
 class LoginForm extends React.Component {
+	constructor(props){
+		super(props);
+	}
   state = {
     username: '',
     password: ''
@@ -18,32 +23,41 @@ class LoginForm extends React.Component {
       return newState;
     });
   };
-
+  
   render() {
+
     return (
+    	<div>
       <form onSubmit={e => this.props.handle_login(e, this.state)}>
-        <h4>Log In</h4>
+        <h1>Log In</h1>
+        <div className="Login">
         <Form.Field>
-        <label htmlFor="username">Username
         <input
           type="text"
+          placeholder="Username"
+          className="input"
           name="username"
           value={this.state.username}
           onChange={this.handle_change}
         />
-        </label>
         </Form.Field>
         <Form.Field>
-        <label htmlFor="password">Password</label>
         <input
           type="password"
+          placeholder="Password"
+          className="input"
           name="password"
           value={this.state.password}
           onChange={this.handle_change}
         />
         </Form.Field>
-         <Button type='submit'>Submit</Button>
+         <Button color="teal" class="buttons" type='submit'>Submit</Button>
+         </div>
       </form>
+        <br />
+
+        />
+        </div>
     );
   }
 }

@@ -16,6 +16,7 @@ from schedule.permissions import has_object_permissions,IsOwner
 from django.utils.safestring import mark_safe
 import json
 import os
+from django.contrib import admin
 from datetime import timedelta
 import datetime
 import pytz
@@ -29,7 +30,10 @@ import httplib2
 from googleapiclient.discovery import build
 from oauth2client.service_account import ServiceAccountCredentials
 from django.contrib.auth import get_user_model
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from rest_auth.registration.views import SocialLoginView
 User = get_user_model()
+
 
 def home(request):
     return render(request, 'schedule/home.html')
@@ -102,8 +106,9 @@ class MeetingView(generics.ListCreateAPIView):
 	serializer_class=MeetingSerializer
 
 	def get(self,request, format=None):
-		# meetings=Meeting.objects.all()
-		meetings=Meeting.objects.all().filter(invitees=request.user.id)
+		meetings=Meeting.objects.all()
+		print(request.user.id)
+		# meetings=Meeting.objects.all().filter(invitees=request.user.id)
 		serializer=MeetingSerializer(meetings, many=True)
 		return Response(serializer.data)
 
@@ -112,7 +117,8 @@ class MeetingView(generics.ListCreateAPIView):
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)	
+		print(serializer.data)
+		return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)	
 		
 class MeetingDetailView(APIView):
 	# permission_classes = [IsOwnerOrAdmin]
@@ -120,14 +126,16 @@ class MeetingDetailView(APIView):
 	def get_object(self,pk):
 		return Meeting.objects.get(pk=pk)
 	def get(self, request, pk, format=None):
-		# print(request.user)
+		print(request.user.is_staff)
 		meeting=Meeting.objects.get(pk=pk)
+		print(meeting.host)
 		serializer=MeetingSerializer(meeting)
 		return Response(serializer.data)
 
 	def put(self,request,pk,format=None):
 		# permission_classes = [IsOwnerOrAdmin]
 		meeting=self.get_object(pk)
+		print(request.user.is_staff)
 		serializer=MeetingSerializer(meeting, data=request.data)
 		if serializer.is_valid() & has_object_permissions(request,meeting):
 			serializer.save()
@@ -136,6 +144,8 @@ class MeetingDetailView(APIView):
 
 	def delete(self,request,pk,format=None):
 		meeting=self.get_object(pk)
+		# print(has_object_permissions(request,meeting));
+		print(request.user.is_staff);
 		if has_object_permissions(request,meeting):
 			meeting.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
@@ -157,6 +167,9 @@ class CommentView(APIView):
 		comment.delete()
 		return Response(status=status.HTTP_204_NO_CONTENT)
 
+class GoogleLogin(SocialLoginView):
+	# authentication_classes = (JSONWebTokenAuthentication,)
+	adapter_class = GoogleOAuth2Adapter
 
 
 def build_service(request):
@@ -187,7 +200,7 @@ def build_service(request):
     service = build('calendar', 'v3', credentials=creds)
     return service
     
-@login_required
+# @login_required
 def create_event(request):
     service = build_service(request)
     meeting=Meeting.objects.latest('id')

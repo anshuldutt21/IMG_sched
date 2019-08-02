@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { Button, Comment, Form, Header } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css';
 
 
 var path= window.location.pathname;
@@ -80,13 +82,17 @@ class MeetingComment extends React.Component {
             comments.map(comment => {
               const { comment_id,comment_post,comment_user,datetime } = comment;
               return (
+              	<Comment>
                 <div key={comment_id}>
+                <Comment.Content>
                 <h2>{comment_id}</h2>
-                  <h2>{comment_post}</h2>
-                  <p>{comment_user}</p>
+                  <Comment.Author><h3>{comment_user}</h3></Comment.Author>
+                  <Comment.Text>{comment_post}</Comment.Text>
                   <h3> {datetime}</h3>
+                  </Comment.Content>
                   <hr />
                 </div>
+                </Comment>
               );
             })
           ) : (

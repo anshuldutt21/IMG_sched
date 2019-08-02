@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,9 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'oauth2_provider',
+    'rest_framework_social_oauth2',
+    # 'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    # 'rest_framework_social_oauth2.authentication.SocialAuthentication',
 ]
 
-SITE_ID=1
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -123,6 +128,8 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
 }
 
@@ -153,10 +160,13 @@ AUTHENTICATION_BACKENDS = (
  'social_core.backends.google.GoogleOpenId',  # for Google authentication
  'social_core.backends.google.GoogleOAuth2',  # for Google authentication
  'social_core.backends.github.GithubOAuth2',  # for Github authentication
- 'social_core.backends.facebook.FacebookOAuth2',  # for Facebook authentication
- 
+ 'social_core.backends.facebook.FacebookOAuth2',
+ 'rest_framework_social_oauth2.backends.DjangoOAuth2',
  'django.contrib.auth.backends.ModelBackend',
+ "allauth.account.auth_backends.AuthenticationBackend",
 )
+
+SITE_ID = 1
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -191,13 +201,12 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 STATIC_URL = '/static/'
 LOGIN_URL = '/schedule/login/'
-GOOGLE_CLIENT_ID='1055466241480-7sbsrpppbqh2v0168rc1drh13c5vbio4.apps.googleusercontent.com'
+# GOOGLE_CLIENT_ID='1055466241480-7sbsrpppbqh2v0168rc1drh13c5vbio4.apps.googleusercontent.com'
 GOOGLE_CLIENT_SECRET = 'vp9tZK7PD-8z0WnAPq2C01lP'
 GOOGLE_SCOPE = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar'
 LOGIN_REDIRECT_URL = '/schedule/profile/'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY ='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'  #Paste CLient Key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '5S4mldkXg1y0cLGiCymeB_1m' #Paste Secret Key
-
 # CORS_ORIGIN_WHITELIST = (
 #       'http://localhost:3000',
 #     )

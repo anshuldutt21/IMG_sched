@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {Redirect} from 'react-router-dom';
+import './../css/Login.css';
 
 
 class Meetingform extends React.Component{
@@ -13,10 +14,10 @@ class Meetingform extends React.Component{
                  detail:"", 
                  venue:"",
                  meeting_choice:1,
-                 host:2,
+                 host:1,
                  errors: null,
                  datetime:"2019-06-14T05:58:05Z",
-                 invitees:[1],
+                 invitees:[],
 	              };
     this.getUsers=this.getUsers.bind(this);
     this.getUsers();
@@ -28,6 +29,7 @@ class Meetingform extends React.Component{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        // 'Authorization': `JWT ${window.localStorage.getItem('token')}`
       },
       body: JSON.stringify(data)
     }).then((response) => response.json())
@@ -35,10 +37,11 @@ class Meetingform extends React.Component{
       	this.setState({
       		success:1,
       	})
-
+console.log(data);
       });
 
     }
+    
     getUsers() {
     fetch('http://127.0.0.1:8000/schedule/userlist/',{
       method:'GET',
@@ -53,6 +56,7 @@ class Meetingform extends React.Component{
       });
     })
     .catch(error => this.setState({ error }));
+    console.log(this.state.users);
    }
 
     handle_change = e => {
@@ -61,14 +65,21 @@ class Meetingform extends React.Component{
     this.setState({
       [name] : value
     });
-    console.log(value);
   };
 
   handle_Change2 = e => {
-  let value = Array.from(e.target.selectedOptions, option => option.value);
-  this.setState({invitees : value});
+  var options = e.target.options;
+  // const value = e.target.value;
+  // this.setState({invitees: [...e.target.selectedOptions].map(o => o.value)}); 
+
+  var value = Array.from(e.target.selectedOptions, option => option.value);
+  // console.log(value);
+  this.setState({ invitees : Array.from(e.target.selectedOptions, option => option.value) });
+  // this.state.invitees.push(value);
+  // this.state.invitees.push(value);
   console.log(this.state.invitees);
-}
+};
+
 
     render () {
     	if(this.state.success==1) {
@@ -76,19 +87,22 @@ class Meetingform extends React.Component{
     	}
     return(
    <form onSubmit={e => this.handleSubmit(e, this.state)}>
+   <div className="Login">
    <label>
    purpose
         </label>
 
    <input 
      name="purpose"
+     className="input"
+     placeholder="Purpose"
      type="text"
      value={this.state.purpose}
      onChange={this.handle_change} />
      <br />
      <label> Detail </label>
 
-     <textarea name="detail" value={this.state.detail} onChange={this.handle_change} />
+     <textarea name="detail" placeholder="Detail" value={this.state.detail} onChange={this.handle_change} />
      <br />
      <label>
    venue
@@ -96,6 +110,8 @@ class Meetingform extends React.Component{
 
    <input 
      name="venue"
+     className="input"
+     placeholder="Venue"
      type="text"
      value={this.state.venue}
      onChange={this.handle_change} />
@@ -114,7 +130,8 @@ class Meetingform extends React.Component{
         </label>
    <input 
      name="datetime"
-     type="datetime-local"
+     type="datetime"
+     className="input"
      value={this.state.datetime}
      onChange={this.handle_change} />
 
@@ -129,10 +146,11 @@ class Meetingform extends React.Component{
        <label>
         invitees
          </label>
-<select name="invitees" onChange={this.handle_Change2} value = {this.state.invitees} multiple>
+<select name="invitees" onChange={this.handle_Change2} value = {this.state.invitees} multiple={true}>
 {this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
 </select>
      <input type="submit" />
+     </div>
   </form>
   );
   }

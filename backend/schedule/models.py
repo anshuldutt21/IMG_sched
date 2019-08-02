@@ -36,8 +36,8 @@ class Meeting(models.Model):
 	datetime=models.DateTimeField(auto_now=False,auto_now_add=False)
 	venue=models.CharField(max_length=30,default="IMG Lab")
 	meeting_choice=models.IntegerField(choices=MEETING_CHOICES)
-	host=models.ForeignKey(UserProfile,related_name='host',on_delete=models.CASCADE)
-	invitees=models.ManyToManyField(UserProfile,related_name='matchinvitees')
+	host=models.ForeignKey(User,related_name='host',on_delete=models.CASCADE)
+	invitees=models.ManyToManyField(User,related_name='matchinvitees')
 	def __str__(self):
 		return self.purpose
 

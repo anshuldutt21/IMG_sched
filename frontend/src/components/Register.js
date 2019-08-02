@@ -1,14 +1,23 @@
 import React, {Component} from 'react'
-// import { Button, Form, Message} from 'semantic-ui-react'
+import { Button, Form, Message, Select} from 'semantic-ui-react'
+import { Checkbox } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import './../css/Login.css';
+import GoogleLogin from 'react-google-login';
+
 
 class SignupForm extends React.Component {
-  state = {
+  constructor(props){
+    super(props);
+
+  }
+      state = {
     username: '',
     password: '',
     is_staff: false,
   };
 
+ 
   handle_change = e => {
     const name = e.target.name;
     const value = e.target.value;
@@ -24,33 +33,41 @@ class SignupForm extends React.Component {
     });
   }
 
+     
+
   render() {
     return (
+      <div>
       <form onSubmit={e => this.props.handle_signup(e, this.state)}>
         <h4>Sign Up</h4>
-        <label htmlFor="username">UserName</label>
+        <div className="Login">
         <input
+        placeholder="UserName"
+        className="input"
           type="text"
           name="username"
           value={this.state.username}
           onChange={this.handle_change}
         />
-        <label htmlFor="is_staff">R U ADMIN ? </label>
-        <input
-          type="checkbox"
-          name="is_staff"
+        <Checkbox label="ARE YOU ADMIN ?" name="is_staff"
           value={this.state.is_staff}
-          onChange={this.toggle_change}
-        />
-        <label htmlFor="password">Password</label>
+          onChange={this.toggle_change} 
+          className="label" />
         <input
+        className="input"
+        placeholder="Password"
           type="password"
           name="password"
           value={this.state.password}
           onChange={this.handle_change}
         />
-        <input type="submit" />
+        <Button color="teal" type="submit">SUBMIT </Button>
+        </div>
       </form>
+      <h3> OR </h3>
+      <br />
+
+        </div>
     );
   }
 }

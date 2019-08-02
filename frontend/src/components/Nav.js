@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 
 function Nav(props) {
   const logged_out_nav = (
-    <ul>
-      <li onClick={() => props.display_form('login')}>login</li>
-      <li onClick={() => props.display_form('signup')}>signup</li>
-    </ul>
+
+    <div class="tab">
+  <button class="tablinks" onClick={() => props.display_form('login')}>Login</button>
+  <button class="tablinks" onClick={() => props.display_form('signup')}>Sign Up</button>
+</div>
+
   );
 
   const logged_in_nav = (

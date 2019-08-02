@@ -29,7 +29,7 @@ class MeetingDetail extends Component {
             this.refs.invitees.value = this.state.invitees;
           })
         }
-      }
+  }
 
  handle_Change2 = e => {
   let value = Array.from(e.target.selectedOptions, option => option.value);

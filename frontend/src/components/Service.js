@@ -7,12 +7,18 @@ export default class Service{
 
 	getMeeting(pk) {
 		const url = `${API_URL}/schedule/test/${pk}`;
-		return axios.get(url).then(response => response.data);
+		const headers = {
+         'Authorization': `JWT ${window.localStorage.getItem('token')}`
+      };
+		return axios.get(url,{headers}).then(response => response.data);
 	}
 
 	deleteMeeting(meeting){
           const url = `${API_URL}/schedule/test/${meeting.pk}`;
-          return axios.delete(url);
+          const headers = {
+         'Authorization': `JWT ${window.localStorage.getItem('token')}`
+      };
+          return axios.delete(url,{headers});
 	}
 	updateMeeting(meeting){
 		const url =`${API_URL}/schedule/test/${meeting.pk}`;

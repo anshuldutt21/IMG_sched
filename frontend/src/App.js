@@ -36,6 +36,7 @@ class App extends Component {
 
   handle_login = (event, data) => {
     event.preventDefault();
+    console.log(JSON.stringify(data));
     fetch('http://127.0.0.1:8000/schedule/token-auth/', {
       method: 'POST',
       headers: {
@@ -56,6 +57,7 @@ class App extends Component {
 
   handle_signup = (e, data) => {
     e.preventDefault();
+    console.log(JSON.stringify(data));
     fetch('http://127.0.0.1:8000/schedule/userlist/', {
       method: 'POST',
       headers: {
@@ -95,7 +97,7 @@ class App extends Component {
     let form;
     switch (this.state.displayed_form) {
       case 'login':
-        form = <LoginForm handle_login={this.handle_login} />;
+        form = <LoginForm handle_login={this.handle_login}  />;
         break;
       case 'signup':
         form = <SignupForm handle_signup={this.handle_signup} />;
@@ -105,16 +107,84 @@ class App extends Component {
     }
 
      const responseGoogle = (response) => {
-      console.log(response.tokenId);
-      // window.localStorage.setItem('token',response.tokenId);
+      // console.log(response.profileObj.name);
       fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token='+response.tokenId, {
         method:'GET',
-    }).then((response) => response.json())
+      })
+        .then(response => response.json())
+    .then(json => {
+      console.log(response.accessToken);
+      console.log(response);
+      if(json.email_verified){
+        // window.localStorage.setItem('token',response.accessToken);
+      }
+    });
+    var y=response.profileObj.givenName;
+    var x=response.googleId;
+      let data1 = {
+    "username" : "bhjkjn",
+    "password": "",
+    "is_staff" : false
+      };
+      data1['username'] = y;
+      data1['password'] = x;
+      console.log(data1);
+      fetch('http://127.0.0.1:8000/schedule/userlist/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data1)
+    })
+      .then(res => res.json())
       .then(json => {
-        window.localStorage.setItem('token',response.tokenId);
-        // console.log(json.getName());.
+        window.localStorage.setItem('token', json.token);
+        window.location.reload();
+      this.setState({
+        logged_in: true,
+        username: response.profileObj.name,
       });
-    }
+   });
+  }
+
+
+  const responseGoogle2 = (response) => {
+      fetch('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token='+response.tokenId, {
+        method:'GET',
+      })
+        .then(response => response.json())
+    .then(json => {
+    });
+    var y=response.profileObj.givenName;
+    var x=response.googleId;
+      let data1 = {
+    "username" : "bhjkjn",
+    "password": "",
+    "is_staff" : false
+      };
+      data1['username'] = y;
+      data1['password'] = x;
+      fetch('http://127.0.0.1:8000/schedule/token-auth/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data1)
+    })
+      .then(res => res.json())
+      .then(json => {
+        window.localStorage.setItem('token', json.token);
+        console.log(data1);
+        console.log(response);
+      this.setState({
+        logged_in: true,
+        username: response.profileObj.name,
+      });
+   });
+
+  }
+
+
     if(!this.state.logged_in){
     return (
       <div className="App">
@@ -124,20 +194,27 @@ class App extends Component {
           handle_logout={this.handle_logout}
         />
         {form}
-        <h3> OR </h3>
-        <br />
-        <GoogleLogin
-        clientId='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'
-        buttonText="LOGIN WITH GOOGLE"
-        onSuccess={responseGoogle}
-        onFailure={responseGoogle}
-        />
+
         <h3>
+        <br />
+
+        <br />
           {this.state.logged_in
             ? `Hello,`
             : 'Please Log In'}
-
+        <GoogleLogin
+        clientId='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'
+        buttonText="SIGN UP  WITH GOOGLE"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        />
+                <GoogleLogin
+        clientId='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'
+        buttonText="LOGIN IN  WITH GOOGLE"
+        onSuccess={responseGoogle2}
+        onFailure={responseGoogle2} />
         </h3>
+
       </div>
     );
   }
