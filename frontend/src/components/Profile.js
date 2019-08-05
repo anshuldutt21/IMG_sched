@@ -5,6 +5,8 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 import Service from './Service';
 import {Redirect} from 'react-router-dom';
+import { Button, Checkbox, Form, Input,Image, Item  } from 'semantic-ui-react';
+import './../css/Login.css';
 import MeetingComment from './MeetingComment';
 
 const service = new Service();
@@ -62,29 +64,30 @@ constructor(props) {
    	   const username = this.props.username;
    		return(
              <div>
-			<h1>hello {this.props.username}  </h1>
-			<ul>
-              <li onClick = {this.props.handle_logout}>logout</li>
-  			</ul>
-			<Link to='/MeetingForm'>add meeting</Link>
+             <div class="Prof">
+			<h1>Hello {this.props.username}  </h1>
+              <Button class="buttonlog"  onClick = {this.props.handle_logout}>logout</Button>
+			</div>
+			<Link to='/MeetingForm' className="meetingadd"><h3 class="meetingsadd">Create Meeting</h3></Link>
               <React.Fragment>
               <div>
           {!isloading ? (
             meetings.map(meeting => {
               const { pk,purpose,detail,venue,datetime,host,invitees } = meeting;
               return (
-                <div key={pk}>
-                <h2>{pk}</h2>
+                <div key={pk} class = "Meeting">
                   <h2>{purpose}</h2>
                   <p>{detail}</p>
-                  <h3>{venue}</h3>
-                  <h3> {datetime}</h3>
-                  <h3> {host} </h3>
-                  <h4> {invitees} </h4>
-                  <button  onClick={(e)=>  this.handleDelete(e,meeting.pk) }> Delete</button>
-                  <a href={"/MeetingDetail/"+meeting.pk}>Update </a>
-                  <a href={"/MeetingComment/"+meeting.pk+"?user="+username}> COMMENTS </a>
-                  
+                  <h3>Venue - {venue}</h3>
+                  <h3> DATETIME - {datetime.slice(0,10)+"  at   "+datetime.slice(11,19)}</h3>
+                  <Button  onClick={(e)=>  this.handleDelete(e,meeting.pk) }> Delete</Button>
+                  <a href={"/MeetingDetail/"+meeting.pk} className="update">Update </a>
+                  <br />
+                  <br />
+
+                  <a href={"/MeetingComment/"+meeting.pk+"?user="+username} className="commentsb"> COMMENTS </a>
+                  <br />
+                  <br />
                   <hr />
                 </div>
               );

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Button, Comment, Form, Header } from 'semantic-ui-react'
-import 'semantic-ui-css/semantic.min.css';
+import { Button, Comment, Form, Header } from 'semantic-ui-react';
+// import 'semantic-ui-css/semantic.min.css';
+import './../css/Login.css';
+
 
 
 var path= window.location.pathname;
@@ -29,7 +31,7 @@ class MeetingComment extends React.Component {
     CommentSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
         var message = data['message'];
-        document.querySelector('#comment-log').value += (message + '\n');
+        // document.querySelector('#comment-log').value += (message + '\n');
     };
 }
 
@@ -73,26 +75,35 @@ class MeetingComment extends React.Component {
  	  const { isloading,comments } =this.state;
  	return (
  		<div>
-    <textarea id="comment-log" cols="100" rows="20"></textarea><br/>
-    <input id="comment-message-input" type="text" size="100"/><br/>
-    <input id="comment-message-submit" type="button" value="Send" onClick={this.submit}/>
+ 		<br />
+    <Header as='h1' dividing>
+     Comments
+     </Header>
+     <br />
  		<React.Fragment>
               <div>
           {!isloading ? (
             comments.map(comment => {
               const { comment_id,comment_post,comment_user,datetime } = comment;
               return (
+              	<Comment.Group size="huge">
               	<Comment>
                 <div key={comment_id}>
+                <Comment.Avatar className="image" src='https://react.semantic-ui.com/images/avatar/large/christian.jpg' />
                 <Comment.Content>
-                <h2>{comment_id}</h2>
-                  <Comment.Author><h3>{comment_user}</h3></Comment.Author>
-                  <Comment.Text>{comment_post}</Comment.Text>
-                  <h3> {datetime}</h3>
-                  </Comment.Content>
-                  <hr />
+        <Comment.Author as='a'>{comment_user}</Comment.Author>
+        <Comment.Metadata>
+          <div>{datetime.slice(0,10)+"  at   "+datetime.slice(11,19)}</div>
+        </Comment.Metadata>
+        <Comment.Text>{comment_post}</Comment.Text>
+        <Comment.Actions>
+          <Comment.Action>Reply</Comment.Action>
+        </Comment.Actions>
+      </Comment.Content>
                 </div>
                 </Comment>
+                </Comment.Group>
+
               );
             })
           ) : (
@@ -100,6 +111,10 @@ class MeetingComment extends React.Component {
           )}
         </div>
         </React.Fragment>
+        <div class="comment">
+    <input id="comment-message-input" type="text" placeholder="Write Your Comment" size="100"/>
+    <input id="comment-message-submit" type="button" value="Send" onClick={this.submit}/>
+    </div>
  		</div>
 
  		)

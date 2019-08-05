@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Service from './Service';
+import './../css/Login.css';
+import {Button} from 'semantic-ui-react';
+
 
 const service = new Service();
 
@@ -53,7 +56,7 @@ this.setState({invitees : value});
           alert("Meeting updated!");
         }).catch(()=>{
         	console.log(this.state.invitees);
-          alert('There was an error! Please re-check your form.');
+          alert('There was an error! Please re-check your form date-time. OR You are not authorized to change the form');
         });
       }
       handleSubmit(event) {
@@ -84,42 +87,53 @@ this.setState({invitees : value});
       render() {
         return (
           <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
+          <div className="Login">
+          <h1> Update Meeting </h1>
+          <div class="form">
             <label>
               Purpose:</label>
-              <input className="form-control" type="text" ref='purpose' />
-
+              <input className="input" type="text" ref='purpose' />
+              </div>
+            <div class="form">
             <label>
               Detail:</label>
-              <input className="form-control" type="text" ref='detail'/>
-
+              <input className="input" type="text" ref='detail'/>
+            </div>
+            <div class="form">
             <label>
               meeting_choice:</label>
               <select className="form-control" ref='meeting_choice'  >
            <option value='1'>Public</option>
             <option value='2'>Private</option>
                </select>
-
+ 			</div>
+ 			<div class="form">
             <label>
               venue:</label>
-              <input className="form-control" type="text" ref='venue' />
-
+              <input className="input" type="text" ref='venue' />
+            </div>
+            <div class="form">
             <label>
               datetime:</label>
-              <input className="form-control" type="text" ref='datetime' />
-
+              <input className="input" type="text" ref='datetime' />
+              </div>
+            <div class="form">
             <label>
               host:</label>
-             <select className="form-control" ref='host' >
+             <select className="select" ref='host' >
              {this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
              </select>
-
+             </div>
+             <br />
+             <div class="form">
              <label>
              invitees </label>
-             <select className="form-control" ref='invitees' onChange={this.handle_Change2}  multiple>
+             <select className="select" ref='invitees' onChange={this.handle_Change2}  multiple>
              {this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
              </select>
-            <input className="btn btn-primary" type="submit" value="Submit" />
+             </div>
+             <br />
+            <Button color="teal" class="buttons" type="submit">SUBMIT </Button>
             </div>
           </form>
         );

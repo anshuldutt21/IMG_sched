@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
+import {Button} from 'semantic-ui-react';
 import {Redirect} from 'react-router-dom';
 import './../css/Login.css';
 
@@ -88,22 +89,28 @@ console.log(data);
     return(
    <form onSubmit={e => this.handleSubmit(e, this.state)}>
    <div className="Login">
+   <h1> Create a Meeting </h1>
+   <div class="form">
    <label>
-   purpose
+   Purpose Of The Meetings
         </label>
 
    <input 
      name="purpose"
      className="input"
-     placeholder="Purpose"
+     placeholder="Lecture/GBM"
      type="text"
      value={this.state.purpose}
      onChange={this.handle_change} />
      <br />
+     </div>
+     <div class="form">
      <label> Detail </label>
 
-     <textarea name="detail" placeholder="Detail" value={this.state.detail} onChange={this.handle_change} />
+     <textarea rows="10" cols="50" name="detail" placeholder="Detail" value={this.state.detail} onChange={this.handle_change} />
+     </div>
      <br />
+     <div class="form">
      <label>
    venue
         </label>
@@ -111,11 +118,13 @@ console.log(data);
    <input 
      name="venue"
      className="input"
-     placeholder="Venue"
+     placeholder="IMG Lab"
      type="text"
      value={this.state.venue}
      onChange={this.handle_change} />
+     </div>
      <br />
+     <div class="form">
      <label>
    meeting_choice
         </label>
@@ -123,8 +132,9 @@ console.log(data);
   <option value='1'>Public</option>
   <option value='2'>Private</option>
 </select> 
-
+</div>
      <br />
+     <div class="form">
      <label>
    datetime
         </label>
@@ -134,22 +144,26 @@ console.log(data);
      className="input"
      value={this.state.datetime}
      onChange={this.handle_change} />
-
+</div>
      <br />
+     <div class="form">
      <label>
        host
         </label>
-<select name="host" onChange={this.handle_change} value = {this.state.host} >
+<select class="select" name="host" onChange={this.handle_change} value = {this.state.host} >
 {this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
 </select>
+</div>
      <br />
+     <div class="form">
        <label>
         invitees
          </label>
-<select name="invitees" onChange={this.handle_Change2} value = {this.state.invitees} multiple={true}>
+<select class="select" name="invitees" onChange={this.handle_Change2} value = {this.state.invitees} multiple={true}>
 {this.state.users.map(user => <option value={user.id}>{user.username}</option>)}
 </select>
-     <input type="submit" />
+</div>
+     <Button color="teal" class="buttons" type="submit">SUBMIT </Button>
      </div>
   </form>
   );

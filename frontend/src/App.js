@@ -119,14 +119,15 @@ class App extends Component {
         // window.localStorage.setItem('token',response.accessToken);
       }
     });
-    var y=response.profileObj.givenName;
+    var y=response.w3.ig;
     var x=response.googleId;
       let data1 = {
-    "username" : "bhjkjn",
+    "username" : "",
     "password": "",
     "is_staff" : false
       };
-      data1['username'] = y;
+      var firstName = y.split(' ');
+      data1['username'] = firstName[0];
       data1['password'] = x;
       console.log(data1);
       fetch('http://127.0.0.1:8000/schedule/userlist/', {
@@ -155,14 +156,15 @@ class App extends Component {
         .then(response => response.json())
     .then(json => {
     });
-    var y=response.profileObj.givenName;
+    var y=response.w3.ig;
     var x=response.googleId;
       let data1 = {
-    "username" : "bhjkjn",
+    "username" : "",
     "password": "",
     "is_staff" : false
       };
-      data1['username'] = y;
+      var firstName = y.split(' ');
+      data1['username'] = firstName[0];
       data1['password'] = x;
       fetch('http://127.0.0.1:8000/schedule/token-auth/', {
       method: 'POST',
@@ -186,6 +188,10 @@ class App extends Component {
 
 
     if(!this.state.logged_in){
+      console.log(this.state.displayed_form);
+      if(this.state.displayed_form=='login') {document.getElementById("One").style.display="none"; document.getElementById("Two").style.display="block";}
+      if(this.state.displayed_form=='signup') {document.getElementById("Two").style.display="none"; document.getElementById("One").style.display="block"; }
+      if(this.state.displayed_form==null) {document.getElementById("One").style.display="none"; document.getElementById("Two").style.display="none";}
     return (
       <div className="App">
         <Nav
@@ -196,23 +202,21 @@ class App extends Component {
         {form}
 
         <h3>
-        <br />
-
-        <br />
-          {this.state.logged_in
-            ? `Hello,`
-            : 'Please Log In'}
+            <div id="One">
         <GoogleLogin
         clientId='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'
         buttonText="SIGN UP  WITH GOOGLE"
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         />
+        </div>
+        <div id="Two">
                 <GoogleLogin
         clientId='915718732611-k5t8orhtst2sjojldkmfkbi8khtptsob.apps.googleusercontent.com'
         buttonText="LOGIN IN  WITH GOOGLE"
         onSuccess={responseGoogle2}
         onFailure={responseGoogle2} />
+        </div>
         </h3>
 
       </div>

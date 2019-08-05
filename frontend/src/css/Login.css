@@ -61,3 +61,78 @@ border-radius: 3px;
   border: 1px solid #ccc;
   border-top: none;
 }
+#One , #Two{
+	display:none;
+}
+
+.Prof{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+}
+h1{
+	margin : 10px;
+}
+.Meeting{
+	padding: 20px;
+
+}
+label{
+	font-size: 25px;
+	font-family: Lucida;
+	padding: 5px;
+    
+}
+.form{
+	display: flex;
+	flex-direction: row;
+	width: 40%;
+}
+.select{
+	width: 20%;
+}
+.comment{
+margin: 10px;
+}
+#comment-message-input{
+	bottom: 20px;
+	 padding: 10px;
+	 margin: 5px;
+	 margin-bottom: 10px;
+}
+#comment-message-submit{
+	padding: 10px;
+	margin: 5px;
+	color: teal;
+}
+.meetingadd{
+	padding: 10px;
+	margin: 10px;
+    color: teal;
+    size: 5px;
+}
+
+.meetingsadd{
+	margin: 10px;
+	padding: 10px;
+}
+.update{
+	margin: 5px;
+	padding: 8px;
+	font-size: 15px;
+	color: white;
+	background-color: teal;
+	border-radius: 5px; 
+}
+a:hover{
+	text-decoration: none;
+	color: white;
+
+}
+.commentsb{
+	margin: 10px;
+	padding: 10px;
+	font-size: 15px;
+	background-color: yellow;
+}

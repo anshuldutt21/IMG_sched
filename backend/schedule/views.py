@@ -106,9 +106,9 @@ class MeetingView(generics.ListCreateAPIView):
 	serializer_class=MeetingSerializer
 
 	def get(self,request, format=None):
-		meetings=Meeting.objects.all()
+		# meetings=Meeting.objects.all()
 		print(request.user.id)
-		# meetings=Meeting.objects.all().filter(invitees=request.user.id)
+		meetings=Meeting.objects.all().filter(invitees=request.user.id)
 		serializer=MeetingSerializer(meetings, many=True)
 		return Response(serializer.data)
 

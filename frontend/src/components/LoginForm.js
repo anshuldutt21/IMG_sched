@@ -55,8 +55,7 @@ class LoginForm extends React.Component {
          </div>
       </form>
         <br />
-
-        />
+        <h3> OR </h3>
         </div>
     );
   }
