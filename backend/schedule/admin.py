@@ -3,9 +3,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from schedule.models import UserProfile
+from schedule.models import UserProfile,Meeting
 # Register your models here.
 admin.site.register(UserProfile)
+admin.site.register(Meeting)
 
 class ProfileInline(admin.StackedInline):
     model = UserProfile
